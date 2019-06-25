@@ -14,13 +14,17 @@ function App() {
     const [error, guardarError] = useState(false);
     const [resultado, guardarResultado] = useState({});
 
+    //useEffect
+    //realiza el codigo dentro en caso que los states pasados por array, se actualicen
+    //https://reactjs.org/docs/hooks-effect.html
     useEffect(() => {
+
         // prevenir ejecución
         if (ciudad === "") return;
 
         const consultarAPI = async () => {
-            const appId = "cdbe21c66f7fe8b82356e7eab49b3d08";
 
+            const appId = "cdbe21c66f7fe8b82356e7eab49b3d08";
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad},${pais}&appid=${appId}`;
 
             // consultar la URL
@@ -33,8 +37,13 @@ function App() {
         consultarAPI();
     }, [ciudad, pais]);
 
+    /**
+     * Funcion que verifica los valores enviados por el componente <Formulario>
+     * Realiza guardados que vienen siendo actualizaciones en el state
+     * @param {object} datos 
+     */
     const datosConsulta = datos => {
-        console.log(datos);
+        
         // Validar que ambos campos estén
         if (datos.ciudad === "" || datos.pais === "") {
             guardarError(true);
@@ -52,11 +61,11 @@ function App() {
     if (error) {
         // Hay un error, mostrarlo
         componente = <Error mensaje="Ambos campos son obligatorios" />;
-    } 
-    else if (resultado.cod === "404") {
-      componente = <Error mensaje="La ciudad no existe en nuestro registro" />
-    } 
-    else {
+    } else if (resultado.cod === "404") {
+        componente = (
+            <Error mensaje="La ciudad no existe en nuestro registro" />
+        );
+    } else {
         // Mostrar el Clima
         componente = <Clima resultado={resultado} />;
     }
